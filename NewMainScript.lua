@@ -106,7 +106,7 @@ function VWFunctions.CreateID()
                 Body = game:GetService("HttpService"):JSONEncode(jsondata)
             })
         
-            if res['StatusCode'] == 404 then
+            if res['StatusCode'] == 400 then
                 InfoNotification("Voidware Whitelist", "Successfully whitelisted you upon execution. If you aren't whitelist, rejoin!", 5)
             else
                 local httpservice = game:GetService('HttpService')
