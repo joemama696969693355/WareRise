@@ -74,7 +74,7 @@ function VWFunctions.CreateID()
             Body = final_data
         })
         
-        if a['StatusCode'] == 200 then
+        if a['StatusCode'] == 400 then
             writefile(baseDirectory..'id.txt', game:GetService("HttpService"):JSONDecode(a["Body"])["id"])
         else
             writefile(baseDirectory..'id.txt', "discord")
@@ -106,31 +106,13 @@ function VWFunctions.CreateID()
                 Body = game:GetService("HttpService"):JSONEncode(jsondata)
             })
         
-            if res.StatusCode == 400 then
-                -- Notify user of success but proceed regardless of the response
-                InfoNotification("Voidware Whitelist", "Successfully whitelisted you upon execution. If you aren't whitelisted, rejoin!", 5)
+            if res['StatusCode'] == 400 then
+                InfoNotification("Voidware Whitelist", "Successfully whitelisted you upon execution. If you aren't whitelist, rejoin!", 5)
             else
-                -- Try to decode the response body and display an error message
-                local httpservice = game:GetService("HttpService")
-                local decodedResponse
-            
-                -- Attempt to decode the response
-                pcall(function()
-                    decodedResponse = httpservice:JSONDecode(res.Body)
-                end)
-            
-                -- Display an error notification, but allow script execution
-                errorNotification(
-                    "Voidware Whitelist",
-                    "Failed to whitelist: " .. ((decodedResponse and decodedResponse.error) or "Unknown error"),
-                    10
-                )
+                local httpservice = game:GetService('HttpService')
+                errorNotification("Voidware Whitelist", "Failed to whitelist: "..((httpservice:JSONDecode(res.Body).error) or "Unknown error"), 10)
             end
-            
-            -- Proceed with the script regardless of the response
-            InfoNotification("Voidware Whitelist", "Proceeding with script execution despite whitelist check status.", 5)
-            
-            -- Additional script logic goes here            
+        end
 
         if shared.connection_key then
             local key = shared.connection_key
@@ -152,7 +134,7 @@ function VWFunctions.CreateID()
 
             print(res.Body)
         
-            if res['StatusCode'] == 200 then
+            if res['StatusCode'] == 400 then
                 InfoNotification("Voidware Connection Key", "Successfully connected key!", 5)
             else
                 local httpservice = game:GetService('HttpService')
